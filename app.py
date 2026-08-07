@@ -25,7 +25,7 @@ with st.sidebar:
     ✅ Overview  
     ✅ Genres  
     ✅ Keywords  
-    
+    """)
     
 
 # Main Content
