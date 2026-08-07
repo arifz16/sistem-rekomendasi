@@ -18,8 +18,7 @@ movies_list = recommender.movies_df['title'].values
 
 # Sidebar
 with st.sidebar:
-    st.title("🎬 AI Recommender")
-    st.write("Versi: Standalone (Tanpa API)")
+    st.title("🎬 Sistem Rekomendasi Film")
     st.markdown("""
     **Fitur yang digunakan:**  
     ✅ Title  
@@ -27,12 +26,11 @@ with st.sidebar:
     ✅ Genres  
     ✅ Keywords  
     
-    *Tidak membutuhkan koneksi internet (TMDB API) untuk menampilkan data.*
-    """)
+    
 
 # Main Content
 st.title("Sistem Rekomendasi Film Berbasis Konten")
-st.write("Temukan film yang mirip berdasarkan jalan cerita dan genre.")
+st.write("Temukan film yang mirip berdasarkan sinopsis dan genre.")
 
 selected_movie = st.selectbox("Cari atau pilih film preferensi Anda:", movies_list)
 
