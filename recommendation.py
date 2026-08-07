@@ -1,24 +1,29 @@
 """
 File: recommendation.py
-Description: Modul logika rekomendasi yang mengembalikan metadata film.
+Description: Menghitung similarity secara on-the-fly untuk menghindari file .pkl berukuran besar.
 """
 
 import pickle
 import pandas as pd
 import difflib
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 class MovieRecommender:
-    def __init__(self, movies_pkl_path='movies.pkl', similarity_pkl_path='similarity.pkl'):
+    def __init__(self, movies_pkl_path='movies.pkl'):
+        # 1. Load data film (hanya butuh file movies.pkl)
         self.movies_df = self.load_model(movies_pkl_path)
-        self.similarity_matrix = self._load_pickle(similarity_pkl_path)
         self.all_titles = self.movies_df['title'].str.lower().tolist()
         
-    def _load_pickle(self, path):
-        with open(path, 'rb') as file:
-            return pickle.load(file)
-            
+        # 2. Hitung Kemiripan (Similarity) secara On-The-Fly
+        # Membaca kolom 'tags' lalu membuat matriks similarity secara instan
+        tfidf = TfidfVectorizer(max_features=5000, stop_words='english', ngram_range=(1,2), min_df=2, max_df=0.8)
+        tfidf_matrix = tfidf.fit_transform(self.movies_df['tags']).toarray()
+        self.similarity_matrix = cosine_similarity(tfidf_matrix)
+        
     def load_model(self, path):
-        movie_dict = self._load_pickle(path)
+        with open(path, 'rb') as file:
+            movie_dict = pickle.load(file)
         return pd.DataFrame(movie_dict)
 
     def search_movie(self, movie_title):
@@ -44,7 +49,6 @@ class MovieRecommender:
             idx = i[0]
             score = i[1]
             
-            # Ambil detail lengkap dari dataframe
             title = self.movies_df.iloc[idx]['title']
             genres = self.movies_df.iloc[idx]['genres_display']
             overview = self.movies_df.iloc[idx]['overview_display']
