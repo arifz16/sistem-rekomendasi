@@ -1,6 +1,6 @@
 """
 File: app.py
-Description: Antarmuka Web Streamlit (Offline / Standalone Dataset)
+Description: Antarmuka Web Streamlit
 """
 
 import streamlit as st
@@ -34,7 +34,7 @@ st.write("Temukan film yang mirip berdasarkan sinopsis dan genre.")
 
 selected_movie = st.selectbox("Cari atau pilih film preferensi Anda:", movies_list)
 
-if st.button("Rekomendasikan Film!", type='primary'):
+if st.button("Rekomendasi Film!", type='primary'):
     with st.spinner("Mencari film dengan plot serupa..."):
         recommendations = recommender.recommend(selected_movie, top_n=10)
         
